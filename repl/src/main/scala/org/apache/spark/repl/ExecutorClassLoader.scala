@@ -75,6 +75,7 @@ class ExecutorClassLoader(
   }
 
   override def findClass(name: String): Class[_] = {
+    loginfo(s"finding class: $name")
     if (userClassPathFirst) {
       findClassLocally(name).getOrElse(parentLoader.loadClass(name))
     } else {
@@ -92,6 +93,7 @@ class ExecutorClassLoader(
   }
 
   private def getClassFileInputStreamFromSparkRPC(path: String): InputStream = {
+    loginfo(s"getClassFileInputStreamFromSparkRPC for path: $path")
     val channel = env.rpcEnv.openChannel(s"$classUri/$path")
     new FilterInputStream(Channels.newInputStream(channel)) {
 
